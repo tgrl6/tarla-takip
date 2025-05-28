@@ -1,12 +1,15 @@
 package com.tugrul.tarla_takip.controller;
 
 import com.tugrul.tarla_takip.dto.CiftciDTO;
+import com.tugrul.tarla_takip.dto.TarlaCreateDTO;
 import com.tugrul.tarla_takip.dto.TarlaDTO;
+import com.tugrul.tarla_takip.model.Ciftci;
 import com.tugrul.tarla_takip.model.Tarla;
 import com.tugrul.tarla_takip.repository.TarlaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -17,10 +20,17 @@ public class TarlaController {
     private final TarlaRepository tarlaRepository;
 
     @PostMapping
-    public Tarla create(@RequestBody Tarla tarla) {
+    public Tarla create(@RequestBody TarlaCreateDTO dto) {
+        Ciftci ciftci = new Ciftci();
+        ciftci.setId(dto.getCiftciId());
+
+        Tarla tarla = new Tarla();
+        tarla.setUrun(dto.getUrun());
+        tarla.setEkimTarihi(LocalDate.parse(dto.getEkimTarihi())); // yyyy-MM-dd formatı
+        tarla.setCiftci(ciftci);
+
         return tarlaRepository.save(tarla);
     }
-
     @GetMapping("/{id}")
     public Tarla getById(@PathVariable Long id) {
         return tarlaRepository.findById(id)

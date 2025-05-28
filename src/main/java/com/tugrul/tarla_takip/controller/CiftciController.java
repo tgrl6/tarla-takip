@@ -1,5 +1,6 @@
 package com.tugrul.tarla_takip.controller;
 
+import com.tugrul.tarla_takip.dto.CiftciDTO;
 import com.tugrul.tarla_takip.model.Ciftci;
 import com.tugrul.tarla_takip.repository.CiftciRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,13 @@ public class CiftciController {
     private final CiftciRepository ciftciRepository;
 
     @GetMapping
-    public List<Ciftci> getAll() {
-        return ciftciRepository.findAll();
+    public List<CiftciDTO> getAll() {
+        return ciftciRepository.findAll().stream().map(c -> {
+            CiftciDTO dto = new CiftciDTO();
+            dto.setId(c.getId());
+            dto.setIsim(c.getIsim());
+            return dto;
+        }).toList();
     }
 
     @PostMapping
